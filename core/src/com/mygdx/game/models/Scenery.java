@@ -4,24 +4,16 @@ package com.mygdx.game.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.customExceptions.OutOfSceneryException;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import static com.mygdx.game.screens.GameScreen.BIRD_START;
 import static com.mygdx.game.screens.GameScreen.WORLD_WIDTH;
 import static com.mygdx.game.screens.GameScreen.FLOOR_HEIGHT;
 import static com.mygdx.game.screens.GameScreen.WORLD_HEIGHT;
 import static com.mygdx.game.screens.GameScreen.rand;
-import static com.mygdx.game.screens.GameScreen.startTime;
 
 public final class Scenery {
 
@@ -55,7 +47,7 @@ public final class Scenery {
         bird = new Bird(BIRD_START);
         bird.setFrozen(true);
         wasp = new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 50));
-        wordToFind = vocabulary.pickUnusedRandomWord();
+        wordToFind = vocabulary.pickUnfoundRandomWord();// recupere un des mots du voc sur l 'un des cochons
         panel = new Panel(new Vector2(20, Y_MAX), wordToFind);
 
         generateFloor();
@@ -73,11 +65,13 @@ public final class Scenery {
      * Add a new element on the scenery
      * @param object
      */
+    //throws c est lancer une exeption
     public void add(PhysicalObject object) throws OutOfSceneryException {
+        // si objet hors de la scene
         if (isOutOfScenery(object) || object.getX()+object.getWidth() > WORLD_WIDTH || object.getY() < Y_MIN || object.getY() + object.getHeight() > Y_MAX) {
             throw new OutOfSceneryException("Veuillez replacer votre block");
         }
-        moveObjectToTopIfColliding(object);
+        moveObjectToTopIfColliding(object);//cela regarde s'il est dans un objet ou s'il le toucher
         scene.add(object);
     }
 
@@ -87,9 +81,9 @@ public final class Scenery {
 
     private void moveObjectToTopIfColliding(PhysicalObject object) {
         for (PhysicalObject p : scene) {
-            if (p.overlaps(object)) {
+            if (p.overlaps(object)) {// si il touche un objet il va le décaler de 1
                 object.setY(p.getY() + p.getHeight() + 1);
-                moveObjectToTopIfColliding(object);
+                moveObjectToTopIfColliding(object); //recursivité conditionnelle
             }
         }
     }
@@ -137,11 +131,11 @@ public final class Scenery {
     }
 
     private void generatePigs(int quantity) {
-        words.add(wordToFind);
+        words.add(wordToFind); // ajoute mots du panneau
         Word word;
-        for (int i = 0; i < quantity-1; i++) {
+        for (int i = 0; i < quantity-1; i++) { // quantité -1 car un des cochons a déjà le mot hu panneau
             do {
-                word = vocabulary.pickRandomWord();
+                word = vocabulary.pickRandomWord(); // choisir un mot aleatoire pour continuer le jeux en cas de moins de 5 mots
             }while (words.contains(word));
             words.add(word);
             word.allocated = true;
@@ -151,7 +145,7 @@ public final class Scenery {
         for (int i = 0; i < quantity; i++) {
             try {
                 Pig pig = new Pig(new Vector2(rand.nextInt(X_MAX - X_MIN) + X_MIN, FLOOR_HEIGHT));
-                pig.setWord(words.get(i));
+                pig.setWord(words.get(i)); //get index from arraylist
                 add(pig);
             } catch (OutOfSceneryException e) {
                 Gdx.app.log("OutOfSceneryException", "Pig: " + e.getMessage());

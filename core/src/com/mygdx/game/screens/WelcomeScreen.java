@@ -62,7 +62,7 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Game);
+        AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Game); // passer à la page game
         return true;
     }
 

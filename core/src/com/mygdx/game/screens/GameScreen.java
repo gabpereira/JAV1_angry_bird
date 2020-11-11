@@ -22,7 +22,6 @@ import com.mygdx.game.models.Scenery;
 import com.mygdx.game.models.Vocabulary;
 import com.mygdx.game.models.Wasp;
 import com.mygdx.game.models.Label;
-import com.mygdx.game.models.Word;
 import com.mygdx.game.providers.VocabularyProvider;
 
 import java.util.Random;
@@ -68,12 +67,14 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         background = new Texture(Gdx.files.internal("background.jpg"));
         vocabularyProvider = vocabularyProvider.getInstance();
         vocabulary = vocabularyProvider.pickRandomVocabulary();
-//        vocabulary = vocabularyProvider.pickVocabulary(0);
+//      /récuperer un mot précis:  vocabulary = vocabularyProvider.pickVocabulary(0);
+
         //buttons
+        // 2 étapes dabord la taille ensuite la position
         pauseButton = new Button("pause.png", "pause", new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 150), 100, 100);
         pauseButton.setX(WORLD_WIDTH - pauseButton.getWidth() - 20);
         scoreButton = new Button("score.png", "score", new Vector2(WORLD_WIDTH / 3 + 75, pauseButton.getY()), 150, 100);
-        scoreButton.setX(pauseButton.getX() - scoreButton.getWidth() - 20);
+        scoreButton.setX(pauseButton.getX() - scoreButton.getWidth() - 20); // faire en sorte que cela ne touche pas l'autre button
 
         newScene();
 
@@ -87,31 +88,33 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     }
 
     public void newScene() {
-        if (vocabulary.countUsedWords() == 0)
+        // s'il y a pas de mot dans voc il va piocher un autre
+        if (vocabulary.countUnusedWords() == 0) // si 0 mot trouver
             vocabulary = vocabularyProvider.pickRandomVocabulary();
 
         scenery = new Scenery(vocabulary);
+        //ajoute a la scene les boutons pause et score
         try {
             scenery.add(pauseButton);
             scenery.add(scoreButton);
         } catch (Exception e) {
-            Gdx.app.log("GameScreen", "Score: " + e.getMessage());
+            Gdx.app.log("GameScreen", "Score: " + e.getMessage());// si hors de l ecran
         }
         bird = scenery.bird;
         wasp = scenery.wasp;
+        //la bull n est pas implémenté dans la scene
         bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomWord(), 0);
         bubbleTime = 2;
     }
 
     public void update() {
-        scoreLabel.setText(String.format("Score: %s", score));
+        scoreLabel.setText(String.format("Score: %s", score));// recup le score et l affiche
 
         float dt = Gdx.graphics.getDeltaTime(); // number of milliseconds elapsed since last render
         scenery.update(dt);
         if (scenery.isOutOfScenery(bird)) {
             bird.reset();
         } else if (bird.overlaps(wasp)) {
-            this.create();
             AngryBird.getInstance().push(AngryBird.SCREENS_NAME.End);
         } else if (scenery.overlaps(bird) != null) {
             PhysicalObject touchedObject = scenery.overlaps(bird);
@@ -119,16 +122,16 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
             scenery.removeObject(touchedObject);
             bird.reset();
         }
-        if (bubble.getDuration() > 0) bubble.countdown(dt);
+        if (bubble.getDuration() > 0) bubble.countdown(dt); //reduire la durée de vie de la bulle
     }
 
     public void calculateScore(PhysicalObject object) {
         if (Pig.class.equals(object.getClass())) {
             Pig pig = (Pig) object;
-            if (pig.getWord().getEnglishWord() == scenery.panel.getWord().getEnglishWord()) {
+            if (pig.getWord().getEnglishWord() == scenery.panel.getWord().getEnglishWord()) { // si mot cochon récupere = mot panneau
                 vocabulary.findWord(scenery.panel.getWord()).found = true;
                 score += pig.incrementScore();
-                newScene();
+                newScene(); // regenere la scene
                 return;
             }
         }
@@ -178,14 +181,14 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         Vector3 actualPos = camera.unproject(new Vector3(screenX, screenY, 0));
         PhysicalObject object = scenery.whichObjectTouched(actualPos.x, actualPos.y);
         if (object == null)
-            return true;
+            return true; // used touchdown
 
         if (Pig.class.equals(object.getClass())) {
             bubble = new Bubble(new Vector2(object.getX(), object.getY() + object.getHeight()), ((Pig) object).getWord(), bubbleTime);
             bubble.translateX(-bubble.getWidth() / 1.8f);
         } else if (Bird.class.equals(object.getClass())) {
             bird.isDragged = true;
-        } else if (Panel.class.equals(object.getClass())) {
+        } else if (Panel.class.equals(object.getClass())) { // uselesss for test
             Gdx.app.log("GameScreen", ((Panel) object).getWord().getEnglishWord());
         } else if (Button.class.equals(object.getClass())) {
             manageButtons((Button) object);
@@ -196,7 +199,6 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     public void manageButtons(Button button) {
         switch (button.getName()) {
             case "score":
-                bird.reset(); // i not founnd how to pause correctly the game...
                 Gdx.app.log("GameScreen", "score touched");
                 AngryBird.getInstance().push(AngryBird.SCREENS_NAME.Score);
                 break;
@@ -218,7 +220,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
             bird.setSpeed(new Vector2(
                     (bird.getOriginX() + bird.WIDTH / 2 - speed.x) * scenery.rubberBandFront.power,
                     (bird.getOriginY() + bird.HEIGHT / 2 - speed.y) * scenery.rubberBandFront.power));
-            bird.fly();
+            bird.fly(); //mettre dragg a false
             scenery.resetRubbers();
         }
         return true;
@@ -229,7 +231,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         Vector3 actualPos = camera.unproject(new Vector3(screenX, screenY, 0));
         if (bird.isDragged && !bird.isFlying) {
             Vector2 dragPos = shootZone(actualPos);
-            bird.setPosition(dragPos.x, dragPos.y);
+            bird.setPosition(dragPos.x, dragPos.y); //mettre la position au bird en fonction de sa position avec l'elastic
 
             scenery.rubberBandBack.setDestination(dragPos.x + bird.getWidth() / 2, dragPos.y + bird.getHeight() / 2);
             scenery.rubberBandFront.setDestination(dragPos.x + bird.getWidth() / 2, dragPos.y + bird.getHeight() / 2);

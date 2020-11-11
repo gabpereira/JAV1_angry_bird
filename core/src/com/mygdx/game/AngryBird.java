@@ -26,13 +26,15 @@ public class AngryBird extends ApplicationAdapter {
         End
     }
 
+    //Méthode statique du Singleton qui vérifie l'instance et la crée
     public static AngryBird getInstance() {
         return instance == null ? instance = new AngryBird() : instance;
     }
 
+    //constructeur en private
     private AngryBird() {
-        screens = new HashMap<>();
-        stackScreens = new Stack<>();
+        screens = new HashMap<>(); // clé=enum valeur=instanciation
+        stackScreens = new Stack<>(); // Stocker les screens
 
         screens.put(SCREENS_NAME.Welcome, new WelcomeScreen());
         screens.put(SCREENS_NAME.Game, new GameScreen());
@@ -41,6 +43,7 @@ public class AngryBird extends ApplicationAdapter {
         screens.put(SCREENS_NAME.End, new EndScreen());
     }
 
+    //méthode pour la stack
     public void push(SCREENS_NAME screen_name) {
         ApplicationAdapter screen = screens.get(screen_name);
         screen.create();
@@ -48,13 +51,14 @@ public class AngryBird extends ApplicationAdapter {
         Gdx.input.setInputProcessor((InputProcessor) stackScreens.peek());
     }
 
+    //sort le premier element du stack
     public void pop() {
         stackScreens.pop();
-        Gdx.input.setInputProcessor((InputProcessor) stackScreens.peek());
+        Gdx.input.setInputProcessor((InputProcessor) stackScreens.peek());// donner les droits interagir avec l ecran
     }
 
     public void goToStart(){
-        for (int i = stackScreens.size()-1; i > 0 ; i--) {
+        for (int i = stackScreens.size()-1; i > 0 ; i--) { // récupere le début de la stack
             pop();
         }
     }
@@ -65,7 +69,7 @@ public class AngryBird extends ApplicationAdapter {
 
     @Override
     public void render() {
-        stackScreens.peek().render();
+        stackScreens.peek().render(); //il prend le premier element et fait le rendu
     }
 
     @Override
