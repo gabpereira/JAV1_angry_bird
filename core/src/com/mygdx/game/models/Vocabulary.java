@@ -16,12 +16,12 @@ public class Vocabulary {
         words = new ArrayList<>();
     }
 
-    public ArrayList<TranslateWord> getWords() {
+    public ArrayList<TranslateWord> getTranslateWord() {
         Gdx.app.log("PIGGY", String.valueOf(words.size()));
         return words;
     }
 
-    public TranslateWord findWord(TranslateWord wordToFind)
+    public TranslateWord findTranslateWord(TranslateWord wordToFind)
     {
         for (TranslateWord word : words)
             if (word == wordToFind)
@@ -32,17 +32,17 @@ public class Vocabulary {
     public void  addTranslateWord(TranslateWord word){
         words.add(word);
     }
-    public  TranslateWord pickRandomWord(){
+    public  TranslateWord pickRandomTranslateWord(){
         return  words.get(MathUtils.random(0,words.size()-1));
     }
-    public TranslateWord pickUnfoundRandomWord(){
+    public TranslateWord pickUnfoundRandomTranslateWord(){
         TranslateWord word;
         do {
             word = words.get(MathUtils.random(0,words.size()-1));
         } while (word.found);
         return word;
     }
-    public int countUnusedWords(){
+    public int countUnusedTranslateWord(){
         int i = 0;
         for (TranslateWord word : words) {
             if(word.found == false)
@@ -51,7 +51,7 @@ public class Vocabulary {
         return i;
     }
 
-    public void unallocateWord() {
+    public void unallocateTranslateWord() {
         for(TranslateWord w: words){
             w.allocated = false;
         }

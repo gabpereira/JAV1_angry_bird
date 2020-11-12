@@ -6,10 +6,13 @@ import com.mygdx.game.screens.WelcomeScreen;
 import com.mygdx.game.models.TranslateWord;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VocabularyProvider {
     static VocabularyProvider singleInstance = null;
     public ArrayList<Vocabulary> vocabularies;
+    private Map<WelcomeScreen.LANGUAGE, String> languages;
 
     public static VocabularyProvider getInstance() {
         if (singleInstance == null)
@@ -17,8 +20,21 @@ public class VocabularyProvider {
         return singleInstance;
     }
 
+    private void createLanguages(){
+        languages.put(WelcomeScreen.LANGUAGE.en,"Anglais");
+        languages.put(WelcomeScreen.LANGUAGE.es,"Espagnol");
+        languages.put(WelcomeScreen.LANGUAGE.fr,"Français");
+    }
+
+    public Map<WelcomeScreen.LANGUAGE, String> getLanguages() {
+        return languages;
+    }
+
     private VocabularyProvider() {
         vocabularies = new ArrayList<>();
+        languages = new HashMap<>();
+
+        createLanguages();
         createVocabularies();
     }
 
@@ -34,7 +50,7 @@ public class VocabularyProvider {
         Vocabulary vocabulary;
         do {
             vocabulary = vocabularies.get(MathUtils.random(0, vocabularies.size() - 1));
-        } while (vocabulary.countUnusedWords() == 0);
+        } while (vocabulary.countUnusedTranslateWord() == 0);
         return vocabulary;
     }
 

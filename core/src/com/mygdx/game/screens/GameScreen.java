@@ -14,7 +14,6 @@ import com.mygdx.game.AngryBird;
 import com.mygdx.game.interfaces.Scoreable;
 import com.mygdx.game.models.Bird;
 import com.mygdx.game.models.Bubble;
-import com.mygdx.game.models.Button;
 import com.mygdx.game.models.Panel;
 import com.mygdx.game.models.PhysicalObject;
 import com.mygdx.game.models.Pig;
@@ -95,7 +94,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
 
     public void newScene() {
         // s'il y a pas de mot dans voc il va piocher un autre
-        if (vocabulary.countUnusedWords() == 0) // si 0 mot trouver
+        if (vocabulary.countUnusedTranslateWord() == 0) // si 0 mot trouver
             vocabulary = vocabularyProvider.pickRandomVocabulary();
 
         scenery = new Scenery(vocabulary);
@@ -111,7 +110,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         bird = scenery.bird;
         wasp = scenery.wasp;
         //la bull n est pas implémenté dans la scene
-        //bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomWord(), 0);
+        //bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomTranslateWord(), 0);
         bubbleTime = 2;
     }
 
@@ -137,7 +136,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         if (Pig.class.equals(object.getClass())) {
             Pig pig = (Pig) object;
             if (pig.getWord().getEnglishWord() == scenery.panel.getWord().getEnglishWord()) { // si mot cochon récupere = mot panneau
-                //vocabulary.findWord(scenery.panel.getWord()).found = true;
+                //vocabulary.findTranslateWord(scenery.panel.getWord()).found = true;
                 score += pig.incrementScore();
                 newScene(); // regenere la scene
                 return;
