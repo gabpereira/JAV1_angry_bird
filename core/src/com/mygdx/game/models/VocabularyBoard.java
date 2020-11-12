@@ -32,9 +32,9 @@ public class VocabularyBoard {
     private void createLabels() {
         float width;
         int i = 0;
-        for (Word w : vocabulary.getWords()) {
-            englishWords.add(new Label(w.getEnglishWord(), Color.BLACK));
-            frenchWords.add(new Label(w.found ? w.getFrenchWord() : "", Color.BLACK));
+        for (TranslateWord w : vocabulary.getWords()) {
+            //.add(new Label(w.getEnglishWord(), Color.BLACK));
+            //frenchWords.add(new Label(w.found ? w.getFrenchWord() : "", Color.BLACK));
 //            frenchWords.add(new Label(w.getFrenchWord() , Color.BLACK));
 
             Label englishWord = englishWords.get(englishWords.size() - 1);

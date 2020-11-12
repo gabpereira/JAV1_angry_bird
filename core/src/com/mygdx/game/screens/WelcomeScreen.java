@@ -8,7 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AngryBird;
+import com.mygdx.game.models.Button;
+
+import java.util.HashMap;
 
 public class WelcomeScreen extends ApplicationAdapter implements InputProcessor {
 
@@ -16,10 +20,29 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
     private OrthographicCamera camera;
     private SpriteBatch batch;
 
+    private Button languageButton;
+    private Button secondLanguageButton;
+    private Button thirdLanguageButton;
+
     private BitmapFont title;
+    private BitmapFont subTitle;
+    private BitmapFont text;
 
     public static final int WORLD_WIDTH = 1600;
     public static final int WORLD_HEIGHT = 900;
+
+    private static AngryBird instance;
+
+    public enum LANGUAGE {
+        fr,
+        en,
+        es
+    }
+
+    public static AngryBird getInstance() {
+        return instance == null ? instance = new AngryBird() : instance;
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -33,6 +56,26 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         title.setColor(Color.ROYAL);
         title.getData().setScale(6);
 
+        subTitle = new BitmapFont();
+        subTitle.setColor(Color.BLUE);
+        subTitle.getData().setScale(4);
+
+        text = new BitmapFont();
+        text.setColor(Color.WHITE);
+        text.getData().setScale(3);
+
+        //buttons
+        // 2 étapes dabord la taille ensuite la position
+        languageButton = new Button( new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 450),  "Français");
+        languageButton.setX(WORLD_WIDTH / 5);
+
+        secondLanguageButton = new Button( new Vector2(WORLD_WIDTH / 2 + 75, languageButton.getY() - 150),  "Français");
+        secondLanguageButton.setX(languageButton.getX());
+
+        thirdLanguageButton = new Button( new Vector2(WORLD_WIDTH / 2 + 75, secondLanguageButton.getY() - 150),  "Français");
+        thirdLanguageButton.setX(secondLanguageButton.getX());
+
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -41,7 +84,12 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
         batch.draw(background, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        title.draw(batch, "Welcome", WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        title.draw(batch, "Angry Wirds", WORLD_WIDTH / 3, WORLD_HEIGHT - 50);
+        languageButton.draw(batch);
+        secondLanguageButton.draw(batch);
+        thirdLanguageButton.draw(batch);
+        text.draw(batch, "Français", WORLD_WIDTH / 4 + 10, WORLD_HEIGHT - 380);
+        subTitle.draw(batch, "Exercice de (choisir) en (choisir)", WORLD_WIDTH / 4, WORLD_HEIGHT - 200);
         batch.end();
     }
 

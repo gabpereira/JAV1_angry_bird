@@ -51,8 +51,8 @@ public class ScoreScreen extends ApplicationAdapter implements InputProcessor {
         camera.update();
         background = new Texture(Gdx.files.internal("background.jpg"));
 
-        exitButton = new Button("exit.png", "exit", new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 125), 100, 100);
-        exitButton.setX(WORLD_WIDTH - exitButton.getWidth() - 20);
+        //exitButton = new Button("exit.png", "exit", new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 125), 100, 100);
+        //exitButton.setX(WORLD_WIDTH - exitButton.getWidth() - 20);
         vocabularyBoard = new VocabularyBoard(gameScreen.vocabulary, 200, gameScreen.FLOOR_HEIGHT, exitButton.getY() - 20);
 
         Gdx.input.setInputProcessor(this);

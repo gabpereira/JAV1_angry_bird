@@ -7,35 +7,36 @@ import com.mygdx.game.models.Word;
 import java.util.ArrayList;
 
 public class Vocabulary {
+    public TranslateWord translateWord;
     String vocName;
-    ArrayList<Word> words;
+    ArrayList<TranslateWord> words;
 
     public Vocabulary(String vocName){
         this.vocName = vocName;
-        words = new ArrayList<Word>();
+        words = new ArrayList<>();
     }
 
-    public ArrayList<Word> getWords() {
+    public ArrayList<TranslateWord> getWords() {
         Gdx.app.log("PIGGY", String.valueOf(words.size()));
         return words;
     }
 
-    public Word findWord(Word wordToFind)
+    public TranslateWord findWord(TranslateWord wordToFind)
     {
-        for (Word word : words)
+        for (TranslateWord word : words)
             if (word == wordToFind)
                 return word;
         return null;
     }
 
-    public void  addWord(Word word){
+    public void  addTranslateWord(TranslateWord word){
         words.add(word);
     }
-    public  Word pickRandomWord(){
+    public  TranslateWord pickRandomWord(){
         return  words.get(MathUtils.random(0,words.size()-1));
     }
-    public Word pickUnfoundRandomWord(){
-        Word word;
+    public TranslateWord pickUnfoundRandomWord(){
+        TranslateWord word;
         do {
             word = words.get(MathUtils.random(0,words.size()-1));
         } while (word.found);
@@ -43,7 +44,7 @@ public class Vocabulary {
     }
     public int countUnusedWords(){
         int i = 0;
-        for (Word word : words) {
+        for (TranslateWord word : words) {
             if(word.found == false)
                 i++;
         }
@@ -51,7 +52,7 @@ public class Vocabulary {
     }
 
     public void unallocateWord() {
-        for(Word w: words){
+        for(TranslateWord w: words){
             w.allocated = false;
         }
     }

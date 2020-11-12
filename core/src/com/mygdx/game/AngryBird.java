@@ -32,7 +32,7 @@ public class AngryBird extends ApplicationAdapter {
     }
 
     //constructeur en private
-    private AngryBird() {
+    public AngryBird() {
         screens = new HashMap<>(); // clé=enum valeur=instanciation
         stackScreens = new Stack<>(); // Stocker les screens
 

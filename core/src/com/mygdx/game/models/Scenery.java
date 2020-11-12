@@ -47,7 +47,7 @@ public final class Scenery {
         bird = new Bird(BIRD_START);
         bird.setFrozen(true);
         wasp = new Wasp(new Vector2(WORLD_WIDTH / 2, WORLD_HEIGHT / 2), new Vector2(20, 50));
-        wordToFind = vocabulary.pickUnfoundRandomWord();// recupere un des mots du voc sur l 'un des cochons
+        //wordToFind = vocabulary.pickUnfoundRandomWord();// recupere un des mots du voc sur l 'un des cochons
         panel = new Panel(new Vector2(20, Y_MAX), wordToFind);
 
         generateFloor();
@@ -132,10 +132,10 @@ public final class Scenery {
 
     private void generatePigs(int quantity) {
         words.add(wordToFind); // ajoute mots du panneau
-        Word word;
+        Word word = null;
         for (int i = 0; i < quantity-1; i++) { // quantité -1 car un des cochons a déjà le mot hu panneau
             do {
-                word = vocabulary.pickRandomWord(); // choisir un mot aleatoire pour continuer le jeux en cas de moins de 5 mots
+                //word = vocabulary.pickRandomWord(); // choisir un mot aleatoire pour continuer le jeux en cas de moins de 5 mots
             }while (words.contains(word));
             words.add(word);
             word.allocated = true;

@@ -51,8 +51,11 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
     private Scenery scenery;
 
     private int score;
+    /*
     private Button scoreButton;
     private Button pauseButton;
+
+     */
     private VocabularyProvider vocabularyProvider;
     public Vocabulary vocabulary;
     private Label scoreLabel;
@@ -71,10 +74,13 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
 
         //buttons
         // 2 étapes dabord la taille ensuite la position
+
+        /*
         pauseButton = new Button("pause.png", "pause", new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 150), 100, 100);
         pauseButton.setX(WORLD_WIDTH - pauseButton.getWidth() - 20);
         scoreButton = new Button("score.png", "score", new Vector2(WORLD_WIDTH / 3 + 75, pauseButton.getY()), 150, 100);
         scoreButton.setX(pauseButton.getX() - scoreButton.getWidth() - 20); // faire en sorte que cela ne touche pas l'autre button
+         */
 
         newScene();
 
@@ -95,15 +101,17 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         scenery = new Scenery(vocabulary);
         //ajoute a la scene les boutons pause et score
         try {
+            /*
             scenery.add(pauseButton);
             scenery.add(scoreButton);
+            */
         } catch (Exception e) {
             Gdx.app.log("GameScreen", "Score: " + e.getMessage());// si hors de l ecran
         }
         bird = scenery.bird;
         wasp = scenery.wasp;
         //la bull n est pas implémenté dans la scene
-        bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomWord(), 0);
+        //bubble = new Bubble(new Vector2(-Bubble.WIDTH, 0), vocabulary.pickRandomWord(), 0);
         bubbleTime = 2;
     }
 
@@ -129,7 +137,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         if (Pig.class.equals(object.getClass())) {
             Pig pig = (Pig) object;
             if (pig.getWord().getEnglishWord() == scenery.panel.getWord().getEnglishWord()) { // si mot cochon récupere = mot panneau
-                vocabulary.findWord(scenery.panel.getWord()).found = true;
+                //vocabulary.findWord(scenery.panel.getWord()).found = true;
                 score += pig.incrementScore();
                 newScene(); // regenere la scene
                 return;
@@ -150,7 +158,7 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
         if (bubble != null && bubble.getDuration() > 0) {
             bubble.draw(batch);
         }
-        scoreLabel.draw(batch, scoreButton.getX() - scoreLabel.getWidth() - 50, WORLD_HEIGHT - scoreLabel.getHeight() - 25);
+        //scoreLabel.draw(batch, scoreButton.getX() - scoreLabel.getWidth() - 50, WORLD_HEIGHT - scoreLabel.getHeight() - 25);
         scenery.panel.draw(batch); // I can't understand why this not works on scenery.draw(batch) ....
         batch.end();
     }
@@ -190,12 +198,13 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
             bird.isDragged = true;
         } else if (Panel.class.equals(object.getClass())) { // uselesss for test
             Gdx.app.log("GameScreen", ((Panel) object).getWord().getEnglishWord());
-        } else if (Button.class.equals(object.getClass())) {
+        } /*else if (Button.class.equals(object.getClass())) {
             manageButtons((Button) object);
         }
+        */
         return true;
     }
-
+/*
     public void manageButtons(Button button) {
         switch (button.getName()) {
             case "score":
@@ -211,6 +220,8 @@ public class GameScreen extends ApplicationAdapter implements InputProcessor {
                 break;
         }
     }
+
+ */
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
