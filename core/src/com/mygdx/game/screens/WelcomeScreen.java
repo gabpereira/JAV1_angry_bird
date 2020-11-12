@@ -23,6 +23,9 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
     private Button languageButton;
     private Button secondLanguageButton;
     private Button thirdLanguageButton;
+    private Button languageButtonRight;
+    private Button secondLanguageButtonRight;
+    private Button thirdLanguageButtonRight;
 
     private BitmapFont title;
     private BitmapFont subTitle;
@@ -75,6 +78,15 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         thirdLanguageButton = new Button( new Vector2(WORLD_WIDTH / 2 + 75, secondLanguageButton.getY() - 150),  "Français");
         thirdLanguageButton.setX(secondLanguageButton.getX());
 
+        languageButtonRight = new Button( new Vector2(WORLD_WIDTH / 2 + 75, WORLD_HEIGHT - 450),  "Français");
+        languageButtonRight.setX(WORLD_WIDTH / 5);
+
+        secondLanguageButtonRight = new Button( new Vector2(WORLD_WIDTH / 2 + 75, languageButtonRight.getY() - 150),  "Français");
+        secondLanguageButtonRight.setX(languageButtonRight.getX());
+
+        thirdLanguageButtonRight = new Button( new Vector2(WORLD_WIDTH / 2 + 75, secondLanguageButtonRight.getY() - 150),  "Français");
+        thirdLanguageButtonRight.setX(secondLanguageButtonRight.getX());
+
 
         Gdx.input.setInputProcessor(this);
     }
@@ -88,6 +100,9 @@ public class WelcomeScreen extends ApplicationAdapter implements InputProcessor 
         languageButton.draw(batch);
         secondLanguageButton.draw(batch);
         thirdLanguageButton.draw(batch);
+        languageButtonRight.draw(batch);
+        secondLanguageButtonRight.draw(batch);
+        thirdLanguageButtonRight.draw(batch);
         text.draw(batch, "Français", WORLD_WIDTH / 4 + 10, WORLD_HEIGHT - 380);
         subTitle.draw(batch, "Exercice de (choisir) en (choisir)", WORLD_WIDTH / 4, WORLD_HEIGHT - 200);
         batch.end();
